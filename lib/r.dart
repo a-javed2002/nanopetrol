@@ -22,21 +22,25 @@ class HomeScreen2 extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(onPressed: (){
-              
-              Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CompanyFormScreen()),
-      );
-            }, child: Text("Add")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CompanyFormScreen()),
+                  );
+                },
+                child: Text("Add")),
             const SizedBox(height: 20),
-            ElevatedButton(onPressed: (){
-              
-              Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CompanyListScreen()),
-      );
-            }, child: Text("see")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CompanyListScreen()),
+                  );
+                },
+                child: Text("see")),
             const SizedBox(height: 20),
             CustomButton(
               label: "Sign Out",

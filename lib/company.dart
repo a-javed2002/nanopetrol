@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:petrol/comapny_form_update.dart';
 
 class CompanyListScreen extends StatelessWidget {
   @override
@@ -28,7 +29,8 @@ class CompanyListScreen extends StatelessWidget {
           }
           return ListView(
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+              Map<String, dynamic> data =
+                  document.data() as Map<String, dynamic>;
               return ListTile(
                 title: Text(data['name']),
                 subtitle: Text(data['description']),
@@ -36,7 +38,8 @@ class CompanyListScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CompanyDetailScreen(companyData: data),
+                      builder: (context) =>
+                          CompanyDetailScreen(companyData: data,companyID: document.id,),
                     ),
                   );
                 },
@@ -51,31 +54,46 @@ class CompanyListScreen extends StatelessWidget {
 
 class CompanyDetailScreen extends StatefulWidget {
   final Map<String, dynamic> companyData;
+  final String companyID;
 
-  const CompanyDetailScreen({required this.companyData});
+  const CompanyDetailScreen({required this.companyData,required this.companyID});
 
   @override
   _CompanyDetailScreenState createState() => _CompanyDetailScreenState();
 }
 
 class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
-  TextEditingController _petrolController = TextEditingController();
-  TextEditingController _dieselController = TextEditingController();
-  TextEditingController _lightDieselController = TextEditingController();
+  // TextEditingController _petrolController = TextEditingController();
+  // TextEditingController _dieselController = TextEditingController();
+  // TextEditingController _lightDieselController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _petrolController.text = widget.companyData['prices']['Jan']['petrol'];
-    _dieselController.text = widget.companyData['prices']['Jan']['diesel'];
-    _lightDieselController.text = widget.companyData['prices']['Jan']['lightDiesel'];
+    // _petrolController.text = widget.companyData['prices']['Jan']['petrol'];
+    // _dieselController.text = widget.companyData['prices']['Jan']['diesel'];
+    // _lightDieselController.text = widget.companyData['prices']['Jan']['lightDiesel'];
   }
 
   @override
   Widget build(BuildContext context) {
+    print(widget.companyData['images']['logo']);
+    print(widget.companyData['images']['cover']);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.companyData['name']),
+        actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.more_horiz_rounded,
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => CompanyUpdateScreen(companyId: widget.companyID,)),
+                );
+              },
+            ),
+          ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -90,38 +108,65 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
             ),
             Text(widget.companyData['description']),
             SizedBox(height: 20),
-            Text(
-              'Prices:',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 10),
-            TextFormField(
-              controller: _petrolController,
-              decoration: InputDecoration(labelText: 'Price for Petrol'),
-              keyboardType: TextInputType.number,
-            ),
-            TextFormField(
-              controller: _dieselController,
-              decoration: InputDecoration(labelText: 'Price for Diesel'),
-              keyboardType: TextInputType.number,
-            ),
-            TextFormField(
-              controller: _lightDieselController,
-              decoration: InputDecoration(labelText: 'Price for Light Diesel'),
-              keyboardType: TextInputType.number,
+            Image.network(
+              widget.companyData['images']['logo'],
+              errorBuilder:
+                  (BuildContext context, Object error, StackTrace? stackTrace) {
+                // If an error occurs while fetching the image, display a fallback image from assets
+                return Image.asset(
+                  'assets/logo.jpeg', // Provide the path to the fallback image in the assets folder
+                  width: 100, // Adjust width and height as needed
+                  height: 100,
+                );
+              },
             ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: _updatePrices,
-                  child: Text('Update Prices'),
-                ),
-              ],
+            Image.network(
+              widget.companyData['images']['cover'],
+              errorBuilder:
+                  (BuildContext context, Object error, StackTrace? stackTrace) {
+                // If an error occurs while fetching the image, display a fallback image from assets
+                return Image.asset(
+                  'assets/logo.jpeg', // Provide the path to the fallback image in the assets folder
+                  width: 200, // Adjust width and height as needed
+                  height: 200,
+                );
+              },
             ),
+
+            // Text(
+            //   'Colors:',
+            //   style: TextStyle(
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
+            // SizedBox(height: 10),
+            // TextFormField(
+            //   controller: _petrolController,
+            //   decoration: InputDecoration(labelText: 'Price for Petrol'),
+            //   keyboardType: TextInputType.number,
+            // ),
+            // TextFormField(
+            //   controller: _dieselController,
+            //   decoration: InputDecoration(labelText: 'Price for Diesel'),
+            //   keyboardType: TextInputType.number,
+            // ),
+            // TextFormField(
+            //   controller: _lightDieselController,
+            //   decoration: InputDecoration(labelText: 'Price for Light Diesel'),
+            //   keyboardType: TextInputType.number,
+            // ),
+
+            // SizedBox(height: 20),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //   children: [
+            //     ElevatedButton(
+            //       onPressed: _updatePrices,
+            //       child: Text('Update Prices'),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),
@@ -131,10 +176,13 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
   void _updatePrices() async {
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
-      await firestore.collection('companies').doc(widget.companyData['id']).update({
-        'prices.Jan.petrol': _petrolController.text,
-        'prices.Jan.diesel': _dieselController.text,
-        'prices.Jan.lightDiesel': _lightDieselController.text,
+      await firestore
+          .collection('companies')
+          .doc(widget.companyData['id'])
+          .update({
+        // 'prices.Jan.petrol': _petrolController.text,
+        // 'prices.Jan.diesel': _dieselController.text,
+        // 'prices.Jan.lightDiesel': _lightDieselController.text,
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Prices updated successfully')),

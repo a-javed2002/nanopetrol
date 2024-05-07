@@ -3,6 +3,7 @@ import 'package:petrol/company.dart';
 import 'package:petrol/company_form.dart';
 import 'package:petrol/models/theme.dart';
 import 'package:petrol/notifiers/theme.dart';
+import 'package:petrol/views/license.dart';
 import 'package:provider/provider.dart';
 
 class AdminScreen extends StatelessWidget {
@@ -33,6 +34,16 @@ class AdminScreen extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => CompanyListScreen()),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.zoom_in,
+            ),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => LicenseVerificationScreen()),
               );
             },
           ),

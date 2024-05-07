@@ -5,6 +5,9 @@ import 'package:petrol/views/admin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrol/views/dashboard_screen.dart';
 import 'package:petrol/views/sales.dart';
+import 'package:petrol/models/theme.dart';
+import 'package:petrol/notifiers/theme.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -32,10 +35,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    CompanyTheme? companyTheme =
+        Provider.of<CompanyThemeProvider>(context).currentTheme;
+    print("Theme is ${companyTheme}");
+    print("Color is ${companyTheme?.mainColor}");
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 28, 137, 187),
+          // backgroundColor:
+          //     companyTheme?.mainColor ?? Color.fromARGB(255, 28, 137, 187),
           automaticallyImplyLeading: false,
           title: const Text(
             'Home',
@@ -64,15 +72,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color.fromARGB(
-                    255, 28, 137, 187), // Your specified background color
-                Colors.white, // To transition smoothly to white
-              ],
-            ),
+            // gradient: LinearGradient(
+            //   begin: Alignment.topCenter,
+            //   end: Alignment.bottomCenter,
+            //   colors: [
+            //     companyTheme?.mainColor ??
+            //         Color.fromARGB(
+            //             255, 28, 137, 187), // Your specified background color
+            //     Colors.white, // To transition smoothly to white
+            //   ],
+            // ),
           ),
           child: dataList.isEmpty
               ? Center(

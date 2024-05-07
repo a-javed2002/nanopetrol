@@ -16,7 +16,7 @@ class SalesDetailScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 28, 137, 187),
+          // backgroundColor: const Color.fromARGB(255, 28, 137, 187),
           title: Text(
             'Sale Details',
             style: TextStyle(fontWeight: FontWeight.bold),
@@ -24,15 +24,15 @@ class SalesDetailScreen extends StatelessWidget {
         ),
         body: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color.fromARGB(
-                    255, 28, 137, 187), // Your specified background color
-                Colors.white, // To transition smoothly to white
-              ],
-            ),
+            // gradient: LinearGradient(
+            //   begin: Alignment.topCenter,
+            //   end: Alignment.bottomCenter,
+            //   colors: [
+            //     Color.fromARGB(
+            //         255, 28, 137, 187), // Your specified background color
+            //     Colors.white, // To transition smoothly to white
+            //   ],
+            // ),
           ),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
