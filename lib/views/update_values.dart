@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:petrol/views/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrol/views/dashboard_screen.dart';
 
 class UpdateFuelScreen extends StatefulWidget {
+  const UpdateFuelScreen({super.key});
+
   @override
   _UpdateFuelScreenState createState() => _UpdateFuelScreenState();
 }
@@ -35,11 +38,11 @@ class _UpdateFuelScreenState extends State<UpdateFuelScreen> {
       child: Scaffold(
         appBar: AppBar(
           // backgroundColor: const Color.fromARGB(255, 28, 137, 187),
-          title: Text('Update Prices',
-            style: TextStyle(fontWeight: FontWeight.bold),),
+          title: const Text('Update Prices',
+            style: const TextStyle(fontWeight: FontWeight.bold),),
         ),
         body: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             // gradient: LinearGradient(
             //   begin: Alignment.topCenter,
             //   end: Alignment.bottomCenter,
@@ -51,7 +54,7 @@ class _UpdateFuelScreenState extends State<UpdateFuelScreen> {
             // ),
           ),
           child: Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: dataList.map<Widget>((data) {
@@ -60,13 +63,13 @@ class _UpdateFuelScreenState extends State<UpdateFuelScreen> {
                   children: [
                     Text(
                       'Name: ${data['name']}',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     TextField(
                       controller:
                           TextEditingController(text: data['price'].toString()),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Enter Price',
                       ),
                       keyboardType: TextInputType.number,
@@ -74,7 +77,7 @@ class _UpdateFuelScreenState extends State<UpdateFuelScreen> {
                         data['price'] = value;
                       },
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                   ],
                 );
               }).toList(),
@@ -87,11 +90,11 @@ class _UpdateFuelScreenState extends State<UpdateFuelScreen> {
             if (x) {
               Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DashboardScreen()),
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
                     );
             }
           },
-          child: Icon(Icons.save),
+          child: const Icon(Icons.save),
         ),
       ),
     );
@@ -105,7 +108,7 @@ class _UpdateFuelScreenState extends State<UpdateFuelScreen> {
 
     // Show a snackbar indicating that data has been updated
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text('Fuel prices updated successfully.'),
       ),
     );

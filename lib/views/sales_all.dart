@@ -36,13 +36,13 @@ class _SalesListScreenState extends State<SalesListScreen> {
       child: Scaffold(
         appBar: AppBar(
           // backgroundColor: const Color.fromARGB(255, 28, 137, 187),
-          title: Text(
+          title: const Text(
             'Sales List',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         body: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             // gradient: LinearGradient(
             //   begin: Alignment.topCenter,
             //   end: Alignment.bottomCenter,
@@ -54,7 +54,7 @@ class _SalesListScreenState extends State<SalesListScreen> {
             // ),
           ),
           child: salesList.isEmpty
-              ? Center(
+              ? const Center(
                   child: Text(
                     'No Sales Yet',
                     style: TextStyle(fontSize: 20),

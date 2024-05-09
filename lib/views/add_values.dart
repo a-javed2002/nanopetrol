@@ -24,15 +24,6 @@ class _AddFuelScreenState extends State<AddFuelScreen> {
         ),
         body: Container(
           decoration: BoxDecoration(
-            // gradient: LinearGradient(
-            //   begin: Alignment.topCenter,
-            //   end: Alignment.bottomCenter,
-            //   colors: [
-            //     Color.fromARGB(
-            //         255, 28, 137, 187), // Your specified background color
-            //     Colors.white, // To transition smoothly to white
-            //   ],
-            // ),
           ),
           child: Padding(
             padding: EdgeInsets.all(20.0),

@@ -46,7 +46,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
 
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('User added successfully')),
+        const SnackBar(content: Text('User added successfully')),
       );
     } catch (error) {
       // Show error message if user addition fails
@@ -60,7 +60,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add User'),
+        title: const Text('Add User'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -69,17 +69,17 @@ class _AddUserScreenState extends State<AddUserScreen> {
           children: [
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: const InputDecoration(labelText: 'Name'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _addUser,
-              child: Text('Add User'),
+              child: const Text('Add User'),
             ),
           ],
         ),

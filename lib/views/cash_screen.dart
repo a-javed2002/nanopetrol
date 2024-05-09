@@ -34,74 +34,60 @@ class _CashPaymentScreenState extends State<CashPaymentScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          // backgroundColor: const Color.fromARGB(255, 28, 137, 187),
           title: Text(
             'Cash Payment',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        body: Container(
-          decoration: BoxDecoration(
-            // gradient: LinearGradient(
-            //   begin: Alignment.topCenter,
-            //   end: Alignment.bottomCenter,
-            //   colors: [
-            //     Color.fromARGB(
-            //         255, 28, 137, 187), // Your specified background color
-            //     Colors.white, // To transition smoothly to white
-            //   ],
-            // ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Total Amount: ${widget.totalAmount}',
-                  style: TextStyle(fontSize: 18),
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Cash Input'),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    setState(() {
-                      cashInput = double.tryParse(value) ?? 0;
-                    });
-                  },
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'Remaining Amount: $remainingAmount',
-                  style: TextStyle(fontSize: 18),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (cashInput >= widget.totalAmount) {
-                      bool x = await _addSaleToSharedPrefs();
-                      if (x) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
-                        );
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Input Cash Amount',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          backgroundColor: Colors.red,
-                        ),
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Total Amount: ${widget.totalAmount}',
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(height: 20),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Cash Input'),
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  setState(() {
+                    cashInput = double.tryParse(value) ?? 0;
+                  });
+                },
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Remaining Amount: $remainingAmount',
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  if (cashInput >= widget.totalAmount) {
+                    bool x = await _addSaleToSharedPrefs();
+                    if (x) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
                       );
                     }
-                  },
-                  child: Text('Pay'),
-                ),
-              ],
-            ),
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Input Cash Amount',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                },
+                child: Text('Pay'),
+              ),
+            ],
           ),
         ),
       ),
@@ -118,6 +104,7 @@ class _CashPaymentScreenState extends State<CashPaymentScreen> {
   Map<String, dynamic> saleInfo = {
     'totalAmount': widget.totalAmount.toString(),
     'price': widget.price,
+    'filling': widget.filling,
     'liter': widget.liter,
     'pay': cashInput,
     'received': remainingAmount,

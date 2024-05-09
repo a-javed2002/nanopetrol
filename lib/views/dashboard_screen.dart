@@ -13,11 +13,11 @@ class DashboardScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           // backgroundColor: const Color.fromARGB(255, 28, 137, 187),
-          title: Text('Dashboard',
+          title: const Text('Dashboard',
             style: TextStyle(fontWeight: FontWeight.bold),),
         ),
         body: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             // gradient: LinearGradient(
             //   begin: Alignment.topCenter,
             //   end: Alignment.bottomCenter,
@@ -40,9 +40,9 @@ class DashboardScreen extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => AddFuelScreen()),
                     );
                   },
-                  child: Text('Add Fuel'),
+                  child: const Text('Add Fuel'),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -50,9 +50,9 @@ class DashboardScreen extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => UpdateFuelScreen()),
                     );
                   },
-                  child: Text('update'),
+                  child: const Text('update'),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -60,9 +60,9 @@ class DashboardScreen extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => SalesListScreen()),
                     );
                   },
-                  child: Text('sales'),
+                  child: const Text('sales'),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -70,9 +70,9 @@ class DashboardScreen extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => UpdatePasswordScreen()),
                     );
                   },
-                  child: Text('update password'),
+                  child: const Text('update password'),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -80,7 +80,7 @@ class DashboardScreen extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => DeleteFuelScreen()),
                     );
                   },
-                  child: Text('More'),
+                  child: const Text('More'),
                 ),
               ],
             ),

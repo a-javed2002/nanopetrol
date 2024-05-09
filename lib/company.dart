@@ -3,18 +3,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:petrol/comapny_form_update.dart';
 
 class CompanyListScreen extends StatelessWidget {
+  const CompanyListScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Company List'),
+        title: const Text('Company List'),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('companies').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
+            return const Center(
+              child: const CircularProgressIndicator(),
             );
           }
           if (snapshot.hasError) {
@@ -23,7 +25,7 @@ class CompanyListScreen extends StatelessWidget {
             );
           }
           if (snapshot.data!.docs.isEmpty) {
-            return Center(
+            return const Center(
               child: Text('No companies found.'),
             );
           }
@@ -84,7 +86,7 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
         title: Text(widget.companyData['name']),
         actions: <Widget>[
             IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.more_horiz_rounded,
               ),
               onPressed: () {
@@ -96,18 +98,18 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
           ],
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Description:',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(widget.companyData['description']),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Image.network(
               widget.companyData['images']['logo'],
               errorBuilder:
@@ -120,7 +122,7 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
                 );
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Image.network(
               widget.companyData['images']['cover'],
               errorBuilder:
@@ -185,7 +187,7 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
         // 'prices.Jan.lightDiesel': _lightDieselController.text,
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Prices updated successfully')),
+        const SnackBar(content: Text('Prices updated successfully')),
       );
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(

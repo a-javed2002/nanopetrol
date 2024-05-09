@@ -170,6 +170,8 @@ import 'dart:io';
 import 'package:petrol/company.dart';
 
 class CompanyFormScreen extends StatefulWidget {
+  const CompanyFormScreen({super.key});
+
   @override
   _CompanyFormScreenState createState() => _CompanyFormScreenState();
 }
@@ -249,7 +251,7 @@ Future<void> _uploadImage(String imagePath, String folderName) async {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Image uploaded successfully')),
+          const SnackBar(content: Text('Image uploaded successfully')),
         );
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -268,14 +270,14 @@ Future<void> _uploadImage(String imagePath, String folderName) async {
         title: const Text('Company Form'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Form(
           key: _formKey,
           child: ListView(
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Name'),
+                decoration: const InputDecoration(labelText: 'Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a name';
@@ -285,7 +287,7 @@ Future<void> _uploadImage(String imagePath, String folderName) async {
               ),
               TextFormField(
                 controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(labelText: 'Description'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a description';
@@ -295,35 +297,35 @@ Future<void> _uploadImage(String imagePath, String folderName) async {
               ),
               TextFormField(
                 controller: _mainColorController,
-                decoration: InputDecoration(labelText: 'Main Color'),
+                decoration: const InputDecoration(labelText: 'Main Color'),
               ),
               TextFormField(
                 controller: _lightColorController,
-                decoration: InputDecoration(labelText: 'Light Color'),
+                decoration: const InputDecoration(labelText: 'Light Color'),
               ),
               TextFormField(
                 controller: _otherColorController,
-                decoration: InputDecoration(labelText: 'Other Color'),
+                decoration: const InputDecoration(labelText: 'Other Color'),
               ),
               TextFormField(
                 controller: _employeeIdsController,
-                decoration: InputDecoration(labelText: 'Employee IDs (comma-separated)'),
+                decoration: const InputDecoration(labelText: 'Employee IDs (comma-separated)'),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Button to upload logo image
               ElevatedButton(
                 onPressed: () => _uploadImage('logo', 'uploads'),
-                child: Text('Upload Logo'),
+                child: const Text('Upload Logo'),
               ),
 
               // Button to upload cover image
               ElevatedButton(
                 onPressed: () => _uploadImage('cover', 'uploads'),
-                child: Text('Upload Cover Image'),
+                child: const Text('Upload Cover Image'),
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate() &&
@@ -332,11 +334,11 @@ Future<void> _uploadImage(String imagePath, String folderName) async {
                     _saveCompanyData();
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Please upload logo and cover image')),
+                      const SnackBar(content: Text('Please upload logo and cover image')),
                     );
                   }
                 },
-                child: Text('Save'),
+                child: const Text('Save'),
               ),
             ],
           ),
@@ -371,7 +373,7 @@ Future<void> _uploadImage(String imagePath, String folderName) async {
       _employeeIdsController.clear();
       // Show success message or navigate to another screen
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Company data saved successfully')),
+        const SnackBar(content: Text('Company data saved successfully')),
       );
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => CompanyListScreen()),

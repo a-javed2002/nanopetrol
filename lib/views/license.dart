@@ -119,6 +119,7 @@ import 'package:petrol/notifiers/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:petrol/models/theme.dart';
 import 'package:petrol/views/splash_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LicenseVerificationScreen extends StatefulWidget {
   @override
@@ -165,6 +166,9 @@ class _LicenseVerificationScreenState extends State<LicenseVerificationScreen> {
           ),
         );
 
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLicense', true);
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Success!'),
@@ -209,29 +213,63 @@ class _LicenseVerificationScreenState extends State<LicenseVerificationScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    chk();
+  }
+
+  void chk() async {
+    print("chking....");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var x = prefs.getBool('isLicense') ?? false;
+    if (x) {
+    print("chking....In");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SplashScreen()),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue,
       appBar: AppBar(
         title: Text('License Verification'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: _licenseKeyController,
-              decoration: InputDecoration(labelText: 'Enter License Key'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _checkLicenseKey(context),
-              child: _isLoading
-                  ? CircularProgressIndicator() // Show loader if loading
-                  : Text('Verify License Key'),
-            ),
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                'assets/backgorund.png'), // Replace with your image asset path
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(20.0),
+          margin: EdgeInsets.symmetric(horizontal: 35),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: 30),
+              Image.asset("assets/logo.png",width: 100,height: 100,),
+              SizedBox(height: 60),
+              TextField(
+                controller: _licenseKeyController,
+                decoration: InputDecoration(labelText: 'Enter License Key'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => _checkLicenseKey(context),
+                child: _isLoading
+                    ? CircularProgressIndicator() // Show loader if loading
+                    : Text('Verify License Key'),
+              ),
+            ],
+          ),
         ),
       ),
     );
