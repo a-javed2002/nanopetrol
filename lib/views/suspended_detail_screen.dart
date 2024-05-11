@@ -130,17 +130,14 @@ class SuspendedSaleDetailScreen extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) => CashPaymentScreen(
-                          //         totalAmount: totalPrice,
-                          //         liter: liters!,
-                          //         price: widget.price,
-                          //         filling: widget.filling,
-                          //       ),
-                          //     ),
-                          //   );
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CashPaymentScreen(
+                                  sale: sale,
+                                ),
+                              ),
+                            );
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(

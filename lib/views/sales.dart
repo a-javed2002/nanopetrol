@@ -66,32 +66,26 @@ class _SalesScreenState extends State<SalesScreen> {
   //   return true;
   // }
 
-  Future<bool> _addSaleToSharedPrefs({
+  Future<Map<bool, Map<String, dynamic>?>> _addSaleToSharedPrefs({
     required double totalAmount,
     required double liter,
     required double price,
     Map<String, dynamic>? sale,
   }) async {
-    sale = widget.sale;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    // Retrieve existing sales list or create a new one if not exist
     List<String> salesList = prefs.getStringList('salesList') ?? [];
 
     if (sale != null) {
-      // If sale object is provided, find and update the previous sale
       int index = salesList.indexWhere((item) {
         Map<String, dynamic> decodedSale = jsonDecode(item);
         return decodedSale['timestamp'] == sale!['timestamp'];
       });
 
       if (index != -1) {
-        // Update the fuel list object and overall details
         Map<String, dynamic> existingSale = jsonDecode(salesList[index]);
         List<Map<String, dynamic>> fuelList =
             List<Map<String, dynamic>>.from(existingSale['fuel']);
 
-        // Update the fuel list object
         fuelList.add({
           'totalAmount': totalAmount.toString(),
           'price': price,
@@ -99,21 +93,16 @@ class _SalesScreenState extends State<SalesScreen> {
           'filling': widget.filling,
         });
 
-        // Update grand total amount
         double existingGrandTotal = existingSale['grandTotal'];
         double newGrandTotal = existingGrandTotal + totalAmount;
 
-        // Update the sale information
         existingSale['fuel'] = fuelList;
         existingSale['grandTotal'] = newGrandTotal;
 
-        // Encode the updated sale information
         String encodedSaleInfo = jsonEncode(existingSale);
 
-        // Replace the existing sale with the updated sale in the list
         salesList[index] = encodedSaleInfo;
 
-        // Save the updated sales list
         await prefs.setStringList('salesList', salesList);
 
         Navigator.pushReplacement(
@@ -125,11 +114,10 @@ class _SalesScreenState extends State<SalesScreen> {
           ),
         );
 
-        return true;
+        return {true: existingSale};
       }
     }
 
-    // Construct the sale information as a map
     Map<String, dynamic> saleInfo = {
       'fuel': [
         {
@@ -139,32 +127,25 @@ class _SalesScreenState extends State<SalesScreen> {
           'filling': widget.filling,
         },
       ],
-      'grandTotal': totalAmount, // Initial grand total amount
+      'grandTotal': totalAmount,
       'isSuspended': true,
-      'pay': 0,
-      'balance': 0,
-      'received': 0,
-      'paymentType': '',
+      'payment': [
+        {
+          'pay': 0,
+          'balance': 0,
+          'received': 0,
+          'paymentType': '',
+        }
+      ],
       'timestamp': DateTime.now().toString(),
     };
 
-    // Encode the sale information map to a JSON string
     String encodedSaleInfo = jsonEncode(saleInfo);
-
-    // Add the encoded sale information to the list
     salesList.add(encodedSaleInfo);
 
-    // Save the updated sales list
     await prefs.setStringList('salesList', salesList);
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SuspendedSalesScreen(),
-      ),
-    );
-
-    return true;
+    return {true: saleInfo};
   }
 
   @override
@@ -216,7 +197,7 @@ class _SalesScreenState extends State<SalesScreen> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (widget.price == 0 || liters == 0) {
                           // Show snackbar with respective messages
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -231,17 +212,40 @@ class _SalesScreenState extends State<SalesScreen> {
                             ),
                           );
                         } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CashPaymentScreen(
-                                totalAmount: totalPrice,
-                                liter: liters!,
-                                price: widget.price,
-                                filling: widget.filling,
-                              ),
-                            ),
+                          Map<bool, Map<String, dynamic>?> result =
+                              await _addSaleToSharedPrefs(
+                            totalAmount: totalPrice,
+                            liter: liters ?? 0,
+                            price: widget.price,
                           );
+
+// Check if the operation was successful
+                          if (result.keys.first) {
+                            // Sale added or updated successfully
+                            Map<String, dynamic>? saleInfo =
+                                result.values.first;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CashPaymentScreen(
+                                  sale: saleInfo!,
+                                ),
+                              ),
+                            );
+                          } else {
+                            print("error in sale");
+
+                            // Show snackbar indicating sale is suspended
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Error.',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -266,7 +270,7 @@ class _SalesScreenState extends State<SalesScreen> {
                   SizedBox(width: 20),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async{
                         if (widget.price == 0 || liters == 0) {
                           // Show snackbar with respective messages
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -281,17 +285,40 @@ class _SalesScreenState extends State<SalesScreen> {
                             ),
                           );
                         } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CardPaymentScreen(
-                                totalAmount: totalPrice,
-                                liter: liters!,
-                                price: widget.price,
-                                filling: widget.filling,
-                              ),
-                            ),
+                          Map<bool, Map<String, dynamic>?> result =
+                              await _addSaleToSharedPrefs(
+                            totalAmount: totalPrice,
+                            liter: liters ?? 0,
+                            price: widget.price,
                           );
+
+// Check if the operation was successful
+                          if (result.keys.first) {
+                            // Sale added or updated successfully
+                            Map<String, dynamic>? saleInfo =
+                                result.values.first;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CardPaymentScreen(
+                                  sale: saleInfo!,
+                                ),
+                              ),
+                            );
+                          } else {
+                            print("error in sale");
+
+                            // Show snackbar indicating sale is suspended
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Error.',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -339,28 +366,55 @@ class _SalesScreenState extends State<SalesScreen> {
                           );
                         } else {
 // Suspend the sale
-                          await _addSaleToSharedPrefs(
+                          Map<bool, Map<String, dynamic>?> result =
+                              await _addSaleToSharedPrefs(
                             totalAmount: totalPrice,
                             liter: liters ?? 0,
                             price: widget.price,
                           );
 
-                          // Clear the form fields
-                          setState(() {
-                            liters = 0;
-                            totalPrice = 0;
-                          });
+// Check if the operation was successful
+                          if (result.keys.first) {
+                            // Sale added or updated successfully
+                            Map<String, dynamic>? saleInfo =
+                                result.values.first;
+                            // Clear the form fields
+                            setState(() {
+                              liters = 0;
+                              totalPrice = 0;
+                            });
 
-                          // Show snackbar indicating sale is suspended
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Sale suspended.',
-                                style: TextStyle(color: Colors.white),
+                            // Show snackbar indicating sale is suspended
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Sale suspended.',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: Colors.blue,
                               ),
-                              backgroundColor: Colors.blue,
-                            ),
-                          );
+                            );
+
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SuspendedSalesScreen(),
+                              ),
+                            );
+                          } else {
+                            print("error in sale");
+
+                            // Show snackbar indicating sale is suspended
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Error.',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(

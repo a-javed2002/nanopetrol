@@ -1,6 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:petrol/excel/excel_border.dart';
+import 'package:petrol/excel/excel_custom_size.dart';
+import 'package:petrol/excel/excel_example.dart';
+import 'package:petrol/excel/excel_example_style.dart';
+import 'package:petrol/excel/excel_save.dart';
+import 'package:petrol/excel/excel_time_consuming.dart';
 import 'package:petrol/views/admin.dart';
 import 'package:petrol/views/btn.dart';
 import 'package:petrol/views/sales_all.dart';
@@ -11,6 +17,7 @@ import 'package:petrol/views/sales.dart';
 import 'package:petrol/models/theme.dart';
 import 'package:petrol/notifiers/theme.dart';
 import 'package:provider/provider.dart';
+import 'package:excel/excel.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map<String, dynamic>? sale;
@@ -351,6 +358,91 @@ class DrawerWidget extends StatelessWidget {
                   builder: (context) => SalesListScreen(),
                 ),
               );
+            },
+          ),
+          ListTile(
+            title: Text('Excel Border'),
+            onTap: () {
+              var excelGenerator = ExcelBorder();
+
+              excelGenerator.addMergedCell(1, 1, 10, 5);
+              excelGenerator.addMergedCellBorder(1, 1, 10, 5);
+              excelGenerator.addMergedCellBorder(2, 10, 5, 10);
+              excelGenerator.addCellWithBorder(0, 1, "Normal border");
+              excelGenerator.setColumnWidth(0, 50);
+
+              excelGenerator.saveToFile("excel_custom.xlsx");
+            },
+          ),
+          ListTile(
+            title: Text('Excel Custom Size'),
+            onTap: () {
+              ExcelCustomSize().generateExcel();
+            },
+          ),
+          ListTile(
+            title: Text('Excel Custom Size'),
+            onTap: () {
+              ExcelCustomSize().generateExcel();
+            },
+          ),
+          ListTile(
+            title: Text('Excel Example Style'),
+            onTap: () {
+              ExcelExampleStyle().writeExcel();
+            },
+          ),
+          ListTile(
+            title: Text('Excel Example'),
+            onTap: () {
+              var excelHandler = ExcelExample();
+              excelHandler.createExcel();
+              excelHandler.readExcel();
+
+              // Example usage of other methods
+              excelHandler.changeSheetDirection('Sheet1', false);
+              excelHandler.changeSheetDirection('Sheet2', true);
+
+              // Define cell style
+              CellStyle cellStyle = CellStyle(
+                bold: true,
+                italic: true,
+                textWrapping: TextWrapping.WrapText,
+                fontFamily: getFontFamily(FontFamily.Comic_Sans_MS),
+                rotation: 0,
+              );
+              excelHandler.applyCellStyle('mySheet', 'A1', cellStyle);
+
+              excelHandler.changeCellValue(
+                  'mySheet', 'A1', 'Heya How are you I am fine ok goood night');
+              excelHandler.changeCellValue('mySheet', 'E5', 'Heya How night');
+
+              excelHandler.iterateAndChangeValues('mySheet');
+
+              excelHandler.renameSheet('mySheet', 'myRenamedNewSheet');
+
+              // Other operations...
+
+              excelHandler
+                  .saveExcel("/Users/kawal/Desktop/git_projects/r.xlsx");
+            },
+          ),
+          ListTile(
+            title: Text('Excel Save'),
+            onTap: () {
+              var excelCreator = ExcelSave();
+              excelCreator.generateTestData();
+              excelCreator.deleteDefaultSheet();
+              excelCreator.renameSheet(
+                  'Sheet To Keep', 'Rename Of Sheet To Keep');
+              excelCreator.saveExcel('example/example.xlsx');
+            },
+          ),
+          ListTile(
+            title: Text('Excel Time Consuming'),
+            onTap: () {
+              var excelGenerator = ExcelTimeConsuming();
+              excelGenerator.generateExcel();
             },
           ),
           ExpansionTile(

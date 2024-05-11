@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:excel/excel.dart';
 
-class ExcelGenerator {
+class ExcelBorder {
   late Excel _excel;
   late Sheet _sheet;
 
-  ExcelGenerator() {
+  ExcelBorder() {
     _excel = Excel.createExcel();
     _sheet = _excel['Sheet1']!;
   }
@@ -69,16 +69,4 @@ class ExcelGenerator {
     }
     return fileBytes;
   }
-}
-
-void main(List<String> args) {
-  var excelGenerator = ExcelGenerator();
-
-  excelGenerator.addMergedCell(1, 1, 10, 5);
-  excelGenerator.addMergedCellBorder(1, 1, 10, 5);
-  excelGenerator.addMergedCellBorder(2, 10, 5, 10);
-  excelGenerator.addCellWithBorder(0, 1, "Normal border");
-  excelGenerator.setColumnWidth(0, 50);
-
-  excelGenerator.saveToFile("excel_custom.xlsx");
 }

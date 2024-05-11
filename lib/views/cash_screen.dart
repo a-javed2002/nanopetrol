@@ -5,18 +5,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrol/views/home_screen.dart';
 
 class CashPaymentScreen extends StatefulWidget {
-  final double liter;
-  final double price;
-  final double totalAmount;
-  final String filling;
+  final Map<String, dynamic>? sale;
 
-  CashPaymentScreen(
-      {Key? key,
-      required this.filling,
-      required this.liter,
-      required this.price,
-      required this.totalAmount})
-      : super(key: key);
+  CashPaymentScreen({
+    Key? key,
+    this.sale,
+  }) : super(key: key);
 
   @override
   _CashPaymentScreenState createState() => _CashPaymentScreenState();
@@ -24,13 +18,22 @@ class CashPaymentScreen extends StatefulWidget {
 
 class _CashPaymentScreenState extends State<CashPaymentScreen> {
   double cashInput = 0;
+  double totalPaid = 0;
   double remainingAmount = 0;
+  double returnAmount = 0;
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    remainingAmount = (widget.sale!['grandTotal'] - totalPaid).abs();
+    returnAmount = cashInput > widget.sale!['grandTotal']
+        ? cashInput - widget.sale!['grandTotal']
+        : 0;
+  }
 
   @override
   Widget build(BuildContext context) {
-    remainingAmount =
-        (widget.totalAmount - (cashInput ?? 0)).abs(); // Taking modulus
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -44,8 +47,34 @@ class _CashPaymentScreenState extends State<CashPaymentScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Display fuels present in the sale
+              if (widget.sale != null)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Fuels:',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Column(
+                      children: (widget.sale!['fuel'] as List).map((fuel) {
+                        return ListTile(
+                          title: Text('Amount: ${fuel['totalAmount']}'),
+                          subtitle: Text(
+                              'Price: ${fuel['price']}, Liter: ${fuel['liter']}, Filling: ${fuel['filling']}'),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(height: 20),
+                  ],
+                ),
               Text(
-                'Total Amount: ${widget.totalAmount}',
+                'Total Amount: ${widget.sale!['grandTotal']}',
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Total Paid: $totalPaid',
                 style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 20),
@@ -64,9 +93,21 @@ class _CashPaymentScreenState extends State<CashPaymentScreen> {
                 style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 20),
+              Text(
+                'Return Amount: $returnAmount',
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
-                  if (cashInput >= widget.totalAmount) {
+                  if (totalPaid < widget.sale!['grandTotal']) {
+                    // Add current cash input to total paid
+                    setState(() {
+                      totalPaid += cashInput;
+                    });
+                  }
+
+                  if (totalPaid >= widget.sale!['grandTotal']) {
                     bool x = await _addSaleToSharedPrefs();
                     if (x) {
                       Navigator.push(
@@ -74,15 +115,6 @@ class _CashPaymentScreenState extends State<CashPaymentScreen> {
                         MaterialPageRoute(builder: (context) => HomeScreen()),
                       );
                     }
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Input Cash Amount',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
                   }
                 },
                 child: Text('Pay'),
@@ -95,32 +127,35 @@ class _CashPaymentScreenState extends State<CashPaymentScreen> {
   }
 
   Future<bool> _addSaleToSharedPrefs() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  // Retrieve existing sales list or create a new one if not exist
-  List<String> salesList = prefs.getStringList('salesList') ?? [];
+    // Retrieve existing sales list or create a new one if not exist
+    List<String> salesList = prefs.getStringList('salesList') ?? [];
 
-  // Construct the sale information as a map
-  Map<String, dynamic> saleInfo = {
-    'totalAmount': widget.totalAmount.toString(),
-    'price': widget.price,
-    'filling': widget.filling,
-    'liter': widget.liter,
-    'pay': cashInput,
-    'received': remainingAmount,
-    'paymentType': 'Cash',
-    'timestamp': DateTime.now().toString(),
-  };
+    if (widget.sale != null) {
+      // If sale object is provided, find and update the previous sale
+      int index = salesList.indexWhere((item) {
+        Map<String, dynamic> decodedSale = jsonDecode(item);
+        return decodedSale['timestamp'] == widget.sale!['timestamp'];
+      });
 
-  // Encode the sale information map to a JSON string
-  String encodedSaleInfo = jsonEncode(saleInfo);
+      if (index != -1) {
+        // Update the existing sale with the new payment details
+        Map<String, dynamic> existingSale = jsonDecode(salesList[index]);
+        existingSale['payment'][0]['pay'] = totalPaid;
+        existingSale['payment'][0]['balance'] = 0;
+        existingSale['payment'][0]['received'] = returnAmount;
+        existingSale['payment'][0]['paymentType'] =
+            'Cash'; // Update payment type accordingly
+        salesList[index] = jsonEncode(existingSale);
 
-  // Add the encoded sale information to the list
-  salesList.add(encodedSaleInfo);
+        // Save the updated sales list
+        await prefs.setStringList('salesList', salesList);
 
-  // Save the updated sales list
-  await prefs.setStringList('salesList', salesList);
+        return true;
+      }
+    }
 
-  return true;
-}
+    return false; // Return false if sale is not found or cannot be updated
+  }
 }
