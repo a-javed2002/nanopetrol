@@ -128,7 +128,7 @@ class LicenseVerificationScreen extends StatefulWidget {
 }
 
 class _LicenseVerificationScreenState extends State<LicenseVerificationScreen> {
-  final TextEditingController _licenseKeyController = TextEditingController(text: "4XeohV4bu90OMHf5a1cM");
+  final TextEditingController _licenseKeyController = TextEditingController(text: "rszc4bSKdmrbHvEddwsw");
   bool _isLoading = false; // State variable to track loading state
 
   Future<void> _checkLicenseKey(BuildContext context) async {

@@ -164,8 +164,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
-// import 'dart:html' as html;
-// import 'dart:convert';
+//import 'dart:html' as html;
+//import 'dart:convert';
 
 import 'package:petrol/company.dart';
 
@@ -219,18 +219,18 @@ Future<void> _uploadImage(String imagePath, String folderName) async {
     //             }
     //           });
 
-    //           ScaffoldMessenger.of(context).showSnackBar(
-    //             SnackBar(content: Text('Image uploaded successfully')),
-    //           );
-    //         } catch (error) {
-    //           ScaffoldMessenger.of(context).showSnackBar(
-    //             SnackBar(content: Text('Failed to upload image: $error')),
-    //           );
-    //         }
-    //       }
-    //     });
+	//               ScaffoldMessenger.of(context).showSnackBar(
+        //         SnackBar(content: Text('Image uploaded successfully')),
+        //       );
+        //     } catch (error) {
+        //       ScaffoldMessenger.of(context).showSnackBar(
+        //         SnackBar(content: Text('Failed to upload image: $error')),
+        //       );
+        //     }
+       //    }
+      //   });
     //   }
-    // });
+   //  });
   } else if (Platform.isAndroid || Platform.isIOS) {
     // Android and iOS specific code for image picking
     final pickerImage = await _picker.pickImage(source: ImageSource.gallery);

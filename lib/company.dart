@@ -116,7 +116,7 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
                   (BuildContext context, Object error, StackTrace? stackTrace) {
                 // If an error occurs while fetching the image, display a fallback image from assets
                 return Image.asset(
-                  'assets/logo.jpeg', // Provide the path to the fallback image in the assets folder
+                  'assets/no-image.jpg', // Provide the path to the fallback image in the assets folder
                   width: 100, // Adjust width and height as needed
                   height: 100,
                 );
@@ -129,7 +129,7 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
                   (BuildContext context, Object error, StackTrace? stackTrace) {
                 // If an error occurs while fetching the image, display a fallback image from assets
                 return Image.asset(
-                  'assets/logo.jpeg', // Provide the path to the fallback image in the assets folder
+                  'assets/no-image.jpg', // Provide the path to the fallback image in the assets folder
                   width: 200, // Adjust width and height as needed
                   height: 200,
                 );

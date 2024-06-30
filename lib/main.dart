@@ -35,26 +35,26 @@ void main() async {
     // Add dummy data
     List<Map<String, String>> dummyDataList = [
       {
-        'name': 'Petrol',
-        'price': '10.00',
+        'name': '6 liter',
+        'price': '100.00',
         'createdAt': DateTime.now().toString(),
         'updatedAt': DateTime.now().toString(),
       },
       {
-        'name': 'Diesel',
-        'price': '20.00',
+        'name': 'll liter',
+        'price': '200.00',
         'createdAt': DateTime.now().toString(),
         'updatedAt': DateTime.now().toString(),
       },
       {
-        'name': 'Octane',
-        'price': '30.00',
+        'name': '19 liter',
+        'price': '300.00',
         'createdAt': DateTime.now().toString(),
         'updatedAt': DateTime.now().toString(),
       },
       {
-        'name': 'Biodiesel',
-        'price': '40.00',
+        'name': '25 liter',
+        'price': '400.00',
         'createdAt': DateTime.now().toString(),
         'updatedAt': DateTime.now().toString(),
       }
@@ -88,10 +88,10 @@ class MyApp extends StatelessWidget {
                 seedColor: Colors.pink, brightness: Brightness.dark),
             fontFamily: "Manrope",
             scaffoldBackgroundColor:
-                themeProvider.currentTheme?.mainColor ?? Colors.blue,
+                themeProvider.currentTheme?.mainColor ?? Color(0xFF99CDF8),
             primaryColor: Colors.black,
             primaryColorLight: themeProvider.currentTheme?.lightColor ??
-                Colors.lightBlueAccent,
+                Color(0xFF99CDF8),
             elevatedButtonTheme: ElevatedButtonThemeData(
                 style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(
@@ -151,7 +151,7 @@ class IconicImageScreen extends StatelessWidget {
         ),
         child: Center(
           child: Image.asset(
-            'assets/logo.jpeg', // Replace with your image asset path
+            'assets/no-image.jpg', // Replace with your image asset path
             width: 200,
             height: 200,
             fit: BoxFit.cover,

@@ -40,7 +40,7 @@ class DashboardScreen extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => AddFuelScreen()),
                     );
                   },
-                  child: const Text('Add Fuel'),
+                  child: const Text('Add Item'),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(

@@ -53,13 +53,21 @@ class _SplashScreenState extends State<SplashScreen> {
                   //   fit: BoxFit.cover,
                   // ),
                   child: companyTheme?.logoUrl != null
-                      ? Image.file(
-                          companyTheme!.logoUrl!,
+                      ? Image.network(
+                          companyTheme!.logoUrl!.toString(),
                           width: 150,
                           height: 150,
                           fit: BoxFit.contain,
                         )
                       : const Placeholder(),
+                  // child: companyTheme?.logoUrl != null
+                  //     ? Image.file(
+                  //         companyTheme!.logoUrl!,
+                  //         width: 150,
+                  //         height: 150,
+                  //         fit: BoxFit.contain,
+                  //       )
+                  //     : const Placeholder(),
                 ),
               ),
             ],

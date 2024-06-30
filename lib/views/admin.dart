@@ -76,14 +76,15 @@ class AdminScreen extends StatelessWidget {
               //   placeholder: (context, url) => const CircularProgressIndicator(),
               //   errorWidget: (context, url, error) => const Icon(Icons.error),
               // ),
-              companyTheme?.logoUrl != null
-                  ? Image.file(
-                      companyTheme!.logoUrl!,
-                      width: 150,
-                      height: 150,
-                      fit: BoxFit.contain,
-                    )
-                  : Placeholder(),
+              
+              // companyTheme?.logoUrl != null
+              //     ? Image.file(
+              //         companyTheme!.logoUrl!,
+              //         width: 150,
+              //         height: 150,
+              //         fit: BoxFit.contain,
+              //       )
+              //     : Placeholder(),
               SizedBox(height: 20),
               // Display the company name and description
               Text(
